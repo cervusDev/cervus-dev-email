@@ -53,9 +53,11 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             set -e
-            cd /cervusdev-email
 
-            echo "📄 Arquivos do projeto:"
+            echo "📁 Indo para o projeto"
+            cd /home/ec2-user/cervusdev-email
+
+            echo "📄 Conteúdo do diretório"
             ls -la
 
             echo "🐳 Atualizando containers"
