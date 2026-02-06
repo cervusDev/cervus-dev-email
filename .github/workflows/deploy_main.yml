@@ -55,8 +55,5 @@ jobs:
             set -e
             cd /home/ec2-user/cervusdev-email
 
-            docker rm -f email-service || true
-            docker-compose -p email-service pull
-            docker-compose -p email-service up -d --remove-orphans
             docker-compose pull
             docker-compose up -d --remove-orphans
