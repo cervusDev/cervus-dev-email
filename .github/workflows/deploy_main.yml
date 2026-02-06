@@ -1,9 +1,7 @@
-name: BACK-END - CI & CD
+name: BACK-END - Deploy
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 env:
@@ -12,32 +10,8 @@ env:
   DOCKER_IMAGE_TAG: 1.0.3
 
 jobs:
-  ci:
-    name: CI - Lint, Test & Build
+  build:
     runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 8
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install 
-
-      - name: Typecheck
-        run: pnpm run typecheck
-
-  cd:
-    name: CD - Docker & ECR Push
-    needs: ci
-    runs-on: ubuntu-latest
-
-    # 🔒 CD só roda em push no main (não em PR)
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v4
