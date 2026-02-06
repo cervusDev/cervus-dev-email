@@ -52,6 +52,12 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
+            set -e
             cd /cervusdev-email
+
+            echo "📄 Arquivos do projeto:"
+            ls -la
+
+            echo "🐳 Atualizando containers"
             docker-compose pull
             docker-compose up -d --remove-orphans
