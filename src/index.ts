@@ -34,35 +34,19 @@ export function createTransport(): Transporter {
 }
 
 interface ISendEmail {
-  toAddress: string[];
+  subject: string;
+  text: string;
 }
 
-export async function sendEmail({ toAddress }: ISendEmail) {
+export async function sendEmail({ subject, text }: ISendEmail) {
   const transporter = createTransport();
-
-  const imagePath = path.resolve(__dirname, '../assets/image.jpeg');
 
   try {
     const info = await transporter.sendMail({
       from: 'MS_3fqs3K@cervusdev.com.br',
-      to: toAddress.join(', '),
-      subject: 'Obrigado por apoiar o CervusDev! Aproveite seu pôster 🎁',
-      text: `
-Olá!
-
-Queremos agradecer por apoiar o projeto CervusDev 💙  
-Como forma de agradecimento, preparamos este pôster exclusivo para você.
-
-Esperamos que goste!
-Equipe CervusDev
-  `,
-      attachments: [
-        {
-          filename: 'poster-cervusdev.jpg',
-          path: imagePath,
-          contentType: 'image/jpeg',
-        },
-      ],
+      to: 'gustavo.cervus@gmail.com',
+      subject,
+      text,
     });
 
     return {
@@ -93,6 +77,8 @@ const serverInfo = {
 
 interface EmailBody {
   email: string;
+  text: string;
+  subject: string;
 }
 
 server.post<{ Body: EmailBody }>(
@@ -109,9 +95,9 @@ server.post<{ Body: EmailBody }>(
     },
   },
   async (request, _) => {
-    const { email } = request.body;
+    const { subject, text } = request.body;
 
-    await sendEmail({ toAddress: [email] });
+    await sendEmail({ subject, text  });
 
     return {
       statusCode: 200,
