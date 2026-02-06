@@ -2,10 +2,9 @@ name: BACK-END - Deploy
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'packages/services/main/**'
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 env:
   ECR_REPOSITORY: cervusdev
