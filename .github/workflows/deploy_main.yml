@@ -38,7 +38,7 @@ jobs:
             $ECR_PUBLIC_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG
 
           docker tag $ECR_REPOSITORY:$DOCKER_IMAGE_TAG \
-            $ECR_PUBLIC_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG
+            $ECR_PUBLIC_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Push Docker image
         run: |
