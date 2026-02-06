@@ -13,9 +13,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./Dockerfile
     steps:
       - uses: actions/checkout@v4
 
@@ -43,9 +40,10 @@ jobs:
       - name: Build by Docker
         run: |
           docker build \
-          -f Dockerfile \
-          -t $ECR_REPOSITORY:$DOCKER_IMAGE_TAG \
-          .
+            -f Dockerfile \
+            -t $ECR_REPOSITORY:$DOCKER_IMAGE_TAG \
+            .
+
       - name: Insert tag in Docker image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
