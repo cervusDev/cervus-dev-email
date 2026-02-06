@@ -44,3 +44,14 @@ jobs:
         run: |
           docker push $ECR_PUBLIC_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_TAG
           docker push $ECR_PUBLIC_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Deploy via SSH (docker compose)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/cervus/backend
+            docker compose pull
+            docker compose up -d --remove-orphans
