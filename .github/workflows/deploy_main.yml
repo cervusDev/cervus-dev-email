@@ -53,13 +53,8 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             set -e
-
-            echo "📁 Indo para o projeto"
             cd /home/ec2-user/cervusdev-email
 
-            echo "📄 Conteúdo do diretório"
-            ls -la
-
-            echo "🐳 Atualizando containers"
+            docker rm -f email-service || true
             docker-compose pull
             docker-compose up -d --remove-orphans

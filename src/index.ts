@@ -89,7 +89,8 @@ server.post<{ Body: EmailBody }>(
         type: 'object',
         required: ['email'],
         properties: {
-          email: { type: 'string', format: 'email' },
+          subject: { type: 'string', format: 'email' },
+          text: { type: 'string' }
         },
       },
     },
