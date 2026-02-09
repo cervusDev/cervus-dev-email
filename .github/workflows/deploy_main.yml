@@ -7,7 +7,7 @@ on:
 env:
   ECR_PUBLIC_REGISTRY: public.ecr.aws/u5c4z3i0
   ECR_REPOSITORY: cervusdev
-  DOCKER_IMAGE_TAG: 1.0.3
+  DOCKER_IMAGE_TAG: 1.0.4
 
 jobs:
   build:
