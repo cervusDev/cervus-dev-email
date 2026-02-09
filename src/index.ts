@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import path from 'path';
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import nodemailer, { Transporter } from 'nodemailer';
@@ -87,9 +86,9 @@ server.post<{ Body: EmailBody }>(
     schema: {
       body: {
         type: 'object',
-        required: ['email'],
+        required: ['subject', "text"  ],
         properties: {
-          subject: { type: 'string', format: 'email' },
+          subject: { type: 'string' },
           text: { type: 'string' }
         },
       },
