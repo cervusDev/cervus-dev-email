@@ -2,6 +2,20 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import nodemailer, { Transporter } from 'nodemailer';
+import { Readable } from 'stream';
+import multipart, { MultipartFile } from '@fastify/multipart';
+
+enum EHttpCodes {
+  Ok = 200,
+  Created = 201,
+  NoContent = 204,
+  BadRequest = 400,
+  Unauthorized = 401,
+  Forbidden = 403,
+  Conflict = 409,
+  UnprocessableEntity = 422,
+  InternalServerError = 500,
+}
 
 const envProductionTransport = {
   host: process.env.SMTP_HOST,
@@ -35,9 +49,10 @@ export function createTransport(): Transporter {
 interface ISendEmail {
   subject: string;
   text: string;
+  attachments?: { filename: string; content: Buffer | Readable }[];
 }
 
-export async function sendEmail({ subject, text }: ISendEmail) {
+export async function sendEmail({ subject, text, attachments }: ISendEmail) {
   const transporter = createTransport();
 
   try {
@@ -46,6 +61,7 @@ export async function sendEmail({ subject, text }: ISendEmail) {
       to: 'gustavo.cervus@gmail.com',
       subject,
       text,
+      attachments,
     });
 
     return {
@@ -67,6 +83,8 @@ server.register(fastifyCors, {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 });
 
+server.register(multipart);
+
 const PORT = Number(process.env.PORT) || 3333;
 
 const serverInfo = {
@@ -74,37 +92,27 @@ const serverInfo = {
   nodeVersion: process.version,
 };
 
-interface EmailBody {
-  email: string;
-  text: string;
-  subject: string;
-}
+server.post('/', async (request, reply) => {
+  const parts = request.parts();
+  const attachments: { filename: string; content: Buffer }[] = [];
+  let subject = '';
+  let text = '';
 
-server.post<{ Body: EmailBody }>(
-  '/',
-  {
-    schema: {
-      body: {
-        type: 'object',
-        required: ['subject', "text"  ],
-        properties: {
-          subject: { type: 'string' },
-          text: { type: 'string' }
-        },
-      },
-    },
-  },
-  async (request, _) => {
-    const { subject, text } = request.body;
+  for await (const part of parts) {
+    if ('file' in part) {
+      const file = part as MultipartFile;
+      const buffer = await file.toBuffer();
+      attachments.push({ filename: file.filename || 'file', content: buffer });
+    } else {
+      if (part.fieldname === 'subject') subject = String(part.value);
+      if (part.fieldname === 'text') text = String(part.value);
+    }
+  }
 
-    await sendEmail({ subject, text  });
+  sendEmail({ subject, text, attachments });
 
-    return {
-      statusCode: 200,
-      message: 'Email enviado com sucesso.',
-    };
-  },
-);
+  reply.status(EHttpCodes.Ok)
+});
 
 server.get('/health', async () => {
   return {
