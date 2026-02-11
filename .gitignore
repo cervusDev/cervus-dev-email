@@ -50,11 +50,6 @@ Thumbs.db
 docker-compose*.yml
 
 # =========================
-# TypeScript
-# =========================
-*.d.ts
-
-# =========================
 # Optional: Coverage / Testing
 # =========================
 coverage/
