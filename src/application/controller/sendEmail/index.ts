@@ -6,7 +6,6 @@ import {
 } from '@shared/interfaces/IController';
 import { IFactory } from './IFactory';
 import { EHttpCode } from '@infra/http/enums/HttpCode';
-import { SendEmailControllerSchemaRequest } from './schemas';
 
 export class SendEmailController implements IController {
   private readonly sendEmailUseCase: SendEmailUseCase;
@@ -14,11 +13,7 @@ export class SendEmailController implements IController {
     this.sendEmailUseCase = factory.makeSendEmailUseCase();
   }
   public async execute(
-    request: IControllerRequest<
-      unknown,
-      unknown,
-      SendEmailControllerSchemaRequest
-    >,
+    request: IControllerRequest,
   ): Promise<IControllerResponse> {
     await this.sendEmailUseCase.execute({
       parts: request.parts,

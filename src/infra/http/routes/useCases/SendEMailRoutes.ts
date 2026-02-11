@@ -11,9 +11,6 @@ export const sendEmailRoutes: IRoute[] = [
   {
     method: 'POST',
     path: rootPath,
-    schema: {
-      consumes: ['multipart/form-data']
-    },
     controller: makeSendEmailController(),
   },
 ];
