@@ -35,4 +35,4 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
 EXPOSE 3333
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/starter.js"]
