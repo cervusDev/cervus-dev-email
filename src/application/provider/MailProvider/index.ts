@@ -7,25 +7,19 @@ import {
   envProductionTransport,
 } from '@environment/transport';
 import nodemailer, { Transporter } from 'nodemailer';
-import { ISendOutputData } from './OutputData';
 
 export class SendEmailProvider implements ISendEmailProvider {
-  public async send(inputData: ISendInputData): Promise<ISendOutputData> {
+  public async send(inputData: ISendInputData): Promise<void> {
     const transporter = this.createTransport();
 
     try {
-      const info = await transporter.sendMail({
-        from: 'MS_3fqs3K@cervusdev.com.br',
-        to: 'gustavo.cervus@gmail.com',
+      await transporter.sendMail({
+        from: envProductionTransport.from,
+        to: envProductionTransport.to,
         subject: inputData.subject,
         text: inputData.text,
         attachments: inputData.attachments,
       });
-
-      return {
-        success: true,
-        messageId: info.messageId,
-      };
     } catch (error) {
       console.error('Erro ao enviar email com imagem:', error);
       throw error;
