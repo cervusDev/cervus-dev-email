@@ -14,6 +14,7 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 import cors from '@fastify/cors';
+import multipart from '@fastify/multipart';
 import { generalEnv } from '@environment/general';
 import { EEnvironment } from '@config/enums';
 import { HostNotAllowedError } from '@infra/http/errors/HostNotAllowedError';
@@ -65,6 +66,11 @@ export class FastifyServer implements IFastifyServer {
       ban: 5,
       errorResponseBuilder: () => {
         throw new RateLimitError();
+      },
+    });
+    await this.fastify.register(multipart, {
+      limits: {
+        fileSize: 10 * 1024 * 1024
       },
     });
   }

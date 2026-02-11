@@ -4,7 +4,6 @@ import 'fastify';
 declare module 'fastify' {
   interface FastifyRequest {
     metadata: {
-      adminId?: number;
     };
   }
 }

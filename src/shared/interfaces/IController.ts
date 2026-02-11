@@ -5,7 +5,6 @@ export interface IControllerRequest<
   TParams = Record<string, string> | unknown,
   TQuery = Record<string, string | string[]> | unknown,
 > {
-  adminId?: number;
   body: TBody;
   params: TParams;
   query: TQuery;

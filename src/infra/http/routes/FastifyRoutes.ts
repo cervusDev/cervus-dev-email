@@ -20,7 +20,6 @@ export class FastifyRouter
       body: request.body,
       params: request.params as Record<string, string>,
       query: request.query as Record<string, string>,
-      adminId: request.metadata.adminId,
       parts: request.parts()
     });
     return reply.code(result.statusCode).send(result.body || undefined);

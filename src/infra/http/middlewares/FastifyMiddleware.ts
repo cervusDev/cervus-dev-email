@@ -20,7 +20,6 @@ export class FastifyMiddleware
       headers: request.headers,
     });
     request.metadata = {
-      ...request.metadata,
       ...response.data,
     };
   }
