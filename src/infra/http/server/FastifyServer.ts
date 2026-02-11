@@ -41,7 +41,7 @@ export class FastifyServer implements IFastifyServer {
   public async registerMiddlewares(): Promise<void> {
     await this.fastify.register(cors, {
       origin: (origin, callback) => {
-        if (generalEnv.environment === EEnvironment.DEVELOPMENT) {
+        if (generalEnv.environment === EEnvironment.PRODUCTION) {
           callback(null, true);
           return;
         }
