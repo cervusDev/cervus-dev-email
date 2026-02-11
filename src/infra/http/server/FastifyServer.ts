@@ -40,6 +40,11 @@ export class FastifyServer implements IFastifyServer {
   }
 
   public async registerMiddlewares(): Promise<void> {
+    await this.fastify.register(multipart, {
+      limits: {
+        fileSize: 10 * 1024 * 1024,
+      },
+    });
     await this.fastify.register(cors, {
       origin: (origin, callback) => {
         if (generalEnv.environment === EEnvironment.PRODUCTION) {
@@ -66,11 +71,6 @@ export class FastifyServer implements IFastifyServer {
       ban: 5,
       errorResponseBuilder: () => {
         throw new RateLimitError();
-      },
-    });
-    await this.fastify.register(multipart, {
-      limits: {
-        fileSize: 10 * 1024 * 1024
       },
     });
   }
